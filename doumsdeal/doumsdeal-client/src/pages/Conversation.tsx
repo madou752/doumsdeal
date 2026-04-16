@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../api/axiosConfig';
+import { SERVER_URL } from '../utils/url';
 
 interface Message {
     id: number;
@@ -103,7 +104,7 @@ export default function Conversation() {
                 <Link to="/messages" className="conv-back">← Retour</Link>
                 <Link to={`/ads/${conv.ads.id}`} className="conv-ad-link">
                     {conv.ads.image_url
-                        ? <img src={`http://localhost:3000${conv.ads.image_url}`} alt={conv.ads.title} />
+                        ? <img src={`${SERVER_URL}${conv.ads.image_url}`} alt={conv.ads.title} />
                         : <div className="conv-ad-no-img">📦</div>
                     }
                     <div className="conv-ad-info">
@@ -150,7 +151,7 @@ export default function Conversation() {
                             {!isMe && (
                                 <div className="avatar avatar-sm msg-avatar">
                                     {msg.sender.avatar_url
-                                        ? <img src={`http://localhost:3000${msg.sender.avatar_url}`} alt={msg.sender.username} />
+                                        ? <img src={`${SERVER_URL}${msg.sender.avatar_url}`} alt={msg.sender.username} />
                                         : <span>{msg.sender.username[0].toUpperCase()}</span>
                                     }
                                 </div>
