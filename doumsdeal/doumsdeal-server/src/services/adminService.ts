@@ -6,6 +6,10 @@ export class AdminService {
         return await AdminManager.findAllUsers();
     }
 
+    static async toggleUserActive(id: number) {
+        return await AdminManager.toggleUserActive(id);
+    }
+
     static async deleteUser(id: number) {
         return await AdminManager.deleteUser(id);
     }
@@ -16,5 +20,9 @@ export class AdminService {
             throw new Error('Annonce introuvable');
         }
         return await AdsManager.delete(id);
+    }
+
+    static async getLogs() {
+        return await AdminManager.getLogs();
     }
 }

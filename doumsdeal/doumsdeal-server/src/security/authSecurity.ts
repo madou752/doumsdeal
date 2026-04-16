@@ -1,10 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
-import {PrismaClient} from '../../generated/prisma/client';
-import {PrismaPg} from '@prisma/adapter-pg';
 import bcrypt from 'bcrypt';
-
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
-const prisma = new PrismaClient({ adapter });
+import { prisma } from '../prisma';
 
 export const requireAuth = async (req: Request, res: Response, next: NextFunction):Promise<void> => {
     const authHeader = req.headers.authorization;
@@ -32,6 +28,11 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
 
         if (!user) {
             res.status(401).json({ message: "Utilisateur non trouvé" });
+            return;
+        }
+
+        if (!user.is_active) {
+            res.status(403).json({ message: "Votre compte a été suspendu" });
             return;
         }
         

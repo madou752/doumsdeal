@@ -1,8 +1,4 @@
-import { PrismaClient } from "../../generated/prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
-
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
-const prisma = new PrismaClient({ adapter });
+import { prisma } from '../prisma';
 
 export class AdsManager {
     static async findAllAds(filters: any = {}) {
@@ -38,14 +34,25 @@ export class AdsManager {
             take: take,
             include: {
                 categories: true,
-                users: { select: { username: true } },
+                users: { select: { username: true, avatar_url: true } },
             },
         });
     }
 
     static async findById(id: number) {
         return await prisma.ads.findUnique({
-            where: { id }
+            where: { id },
+            include: {
+                categories: true,
+                users: { select: { username: true, avatar_url: true } },
+            },
+        });
+    }
+
+    static async incrementViews(id: number) {
+        return await prisma.ads.update({
+            where: { id },
+            data: { views_count: { increment: 1 } },
         });
     }
     
@@ -59,5 +66,51 @@ export class AdsManager {
 
     static async delete(id: number) {
         return await prisma.ads.delete({ where: { id } });
+    }
+
+    // ===== FAVORIS =====
+    static async addFavorite(userId: number, adId: number) {
+        await prisma.favorites.upsert({
+            where: { user_id_ad_id: { user_id: userId, ad_id: adId } },
+            create: { user_id: userId, ad_id: adId },
+            update: {},
+        });
+    }
+
+    static async removeFavorite(userId: number, adId: number) {
+        await prisma.favorites.deleteMany({
+            where: { user_id: userId, ad_id: adId },
+        });
+    }
+
+    static async getUserFavorites(userId: number) {
+        const favs = await prisma.favorites.findMany({
+            where: { user_id: userId },
+            orderBy: { created_at: 'desc' },
+            select: { ad_id: true },
+        });
+        if (favs.length === 0) return [];
+        const adIds = favs.map(f => f.ad_id);
+        return await prisma.ads.findMany({
+            where: { id: { in: adIds } },
+            include: {
+                categories: true,
+                users: { select: { username: true, avatar_url: true } },
+            },
+        });
+    }
+
+    static async isFavorite(userId: number, adId: number) {
+        const fav = await prisma.favorites.findFirst({
+            where: { user_id: userId, ad_id: adId },
+        });
+        return !!fav;
+    }
+
+    static async markAsSold(id: number) {
+        return await prisma.ads.update({
+            where: { id },
+            data: { status: 'SOLD' },
+        });
     }
 }

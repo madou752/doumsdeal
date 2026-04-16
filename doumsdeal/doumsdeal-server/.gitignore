@@ -4,3 +4,6 @@ node_modules
 
 /generated/prisma
 dist/
+# Garder le dossier upload mais pas son contenu
+/upload/*
+!/upload/.gitkeep
