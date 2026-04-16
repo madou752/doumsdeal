@@ -20,14 +20,19 @@ app.use(express.json());
 
 app.use('/upload', express.static(path.join(__dirname, '../upload')));
 
+// Servir le build React en production
+const clientDist = path.join(__dirname, '../../doumsdeal-client/dist');
+app.use(express.static(clientDist));
+
 app.use('/api/auth', authRoutes);
 app.use('/api/ads', adsRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/messages', messagesRoutes);
 
-app.get('/',(req, res) => {
-    res.json({ message: 'Le serveur est en ligne' });
+// Catch-all SPA : toutes les routes non-API renvoient index.html
+app.get(/^\/(?!api|upload).*/, (_req, res) => {
+    res.sendFile(path.join(clientDist, 'index.html'));
 });
 
 app.listen(port, async () => {
