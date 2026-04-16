@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
-class AuthController {
+export class AuthController {
     static async register(req: Request, res: Response): Promise<void> {
         try {
             const { username, email, password } = req.body;
