@@ -5,7 +5,6 @@ DROP TYPE IF EXISTS user_role CASCADE;
 DROP TYPE IF EXISTS ad_status CASCADE;
 DROP TYPE IF EXISTS item_condition CASCADE;
 
-
 CREATE TYPE user_role AS ENUM ('USER', 'ADMIN');
 CREATE TYPE ad_status AS ENUM ('AVAILABLE', 'SOLD');
 CREATE TYPE item_condition AS ENUM ('NEW', 'LIKE_NEW', 'GOOD', 'FAIR');
@@ -15,6 +14,7 @@ CREATE TABLE users (
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
+    avatar_url VARCHAR(255),
     role user_role DEFAULT 'USER',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -22,7 +22,8 @@ CREATE TABLE users (
 
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50) UNIQUE NOT NULL
+    name VARCHAR(50) UNIQUE NOT NULL,
+    icon_name VARCHAR(50)
 );
 
 CREATE TABLE ads (
@@ -30,8 +31,11 @@ CREATE TABLE ads (
     title VARCHAR(100) NOT NULL,
     description TEXT NOT NULL,
     price DECIMAL(10, 2) NOT NULL DEFAULT 0.00 CHECK (price >= 0),
+    is_negotiable BOOLEAN DEFAULT FALSE,
     condition item_condition NOT NULL DEFAULT 'GOOD',
     image_url VARCHAR(255),
+    location VARCHAR(100),
+    views_count INTEGER DEFAULT 0,
     status ad_status DEFAULT 'AVAILABLE',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

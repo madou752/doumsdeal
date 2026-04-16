@@ -3,3 +3,7 @@ node_modules
 .env
 
 /generated/prisma
+dist/
+# Garder le dossier upload mais pas son contenu
+/upload/*
+!/upload/.gitkeep
