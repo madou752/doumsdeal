@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../api/axiosConfig';
 import { Link } from 'react-router-dom';
+import { SERVER_URL } from '../utils/url';
 
 interface Ad {
     id: number;
@@ -80,7 +81,7 @@ export default function Home() {
                             {ad.image_url ? (
                                 <div className="ad-card-img">
                                     <img
-                                        src={`http://localhost:3000${ad.image_url}`}
+                                        src={`${SERVER_URL}${ad.image_url}`}
                                         alt={ad.title}
                                         onError={e => {
                                             const parent = (e.target as HTMLImageElement).parentElement;
@@ -113,7 +114,7 @@ export default function Home() {
                                 <div className="ad-card-seller">
                                     <div className="avatar avatar-sm">
                                         {ad.users?.avatar_url
-                                            ? <img src={`http://localhost:3000${ad.users.avatar_url}`} alt={ad.users.username} />
+                                            ? <img src={`${SERVER_URL}${ad.users.avatar_url}`} alt={ad.users.username} />
                                             : <span>{ad.users?.username?.[0]?.toUpperCase() ?? '?'}</span>
                                         }
                                     </div>

@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import api from '../api/axiosConfig';
+import { SERVER_URL } from '../utils/url';
 
 export default function Header() {
     const navigate = useNavigate();
@@ -56,7 +57,7 @@ export default function Header() {
                             <button className="header-profile-btn">
                                 <div className="avatar avatar-sm">
                                     {avatarUrl
-                                        ? <img src={`http://localhost:3000${avatarUrl}`} alt={username ?? ''} />
+                                        ? <img src={`${SERVER_URL}${avatarUrl}`} alt={username ?? ''} />
                                         : <span>{username?.[0]?.toUpperCase() ?? '?'}</span>
                                     }
                                 </div>
