@@ -53,6 +53,8 @@ export default function Profile() {
             // Mettre à jour le localStorage
             localStorage.setItem('username', res.data.username);
             if (res.data.avatar_url) localStorage.setItem('avatarUrl', res.data.avatar_url);
+            else localStorage.removeItem('avatarUrl');
+            window.dispatchEvent(new Event('focus'));
 
             setUser(prev => prev ? { ...prev, ...res.data } : prev);
             setMessage('Profil mis à jour avec succès.');

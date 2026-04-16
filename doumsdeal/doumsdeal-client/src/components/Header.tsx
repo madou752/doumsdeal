@@ -5,10 +5,22 @@ import { SERVER_URL } from '../utils/url';
 
 export default function Header() {
     const navigate = useNavigate();
-    const isLoggedIn = !!localStorage.getItem('token');
-    const isAdmin = localStorage.getItem('role') === 'ADMIN';
-    const username = localStorage.getItem('username');
-    const avatarUrl = localStorage.getItem('avatarUrl');
+    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
+    const [isAdmin, setIsAdmin] = useState(localStorage.getItem('role') === 'ADMIN');
+    const [username, setUsername] = useState(localStorage.getItem('username'));
+    const [avatarUrl, setAvatarUrl] = useState(localStorage.getItem('avatarUrl'));
+
+    useEffect(() => {
+        const sync = () => {
+            setIsLoggedIn(!!localStorage.getItem('token'));
+            setIsAdmin(localStorage.getItem('role') === 'ADMIN');
+            setUsername(localStorage.getItem('username'));
+            setAvatarUrl(localStorage.getItem('avatarUrl'));
+        };
+        window.addEventListener('storage', sync);
+        window.addEventListener('focus', sync);
+        return () => { window.removeEventListener('storage', sync); window.removeEventListener('focus', sync); };
+    }, []);
     const [unread, setUnread] = useState(0);
 
     useEffect(() => {
