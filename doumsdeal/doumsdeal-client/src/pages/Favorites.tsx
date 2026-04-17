@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { SERVER_URL } from '../utils/url';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/axiosConfig';
 
@@ -47,7 +48,7 @@ export default function Favorites() {
                             <Link to={`/ads/${ad.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                 {ad.image_url ? (
                                     <div className="ad-card-img">
-                                        <img src={`http://localhost:3000${ad.image_url}`} alt={ad.title}
+                                        <img src={`${SERVER_URL}${ad.image_url}`} alt={ad.title}
                                             onError={e => {
                                                 const p = (e.target as HTMLImageElement).parentElement;
                                                 if (p) { p.className = 'ad-card-no-img'; p.innerHTML = '<span>Pas de photo</span>'; }
@@ -63,7 +64,7 @@ export default function Favorites() {
                                     <div className="ad-card-seller">
                                         <div className="avatar avatar-sm">
                                             {ad.users?.avatar_url
-                                                ? <img src={`http://localhost:3000${ad.users.avatar_url}`} alt={ad.users.username} />
+                                                ? <img src={`${SERVER_URL}${ad.users.avatar_url}`} alt={ad.users.username} />
                                                 : <span>{ad.users?.username?.[0]?.toUpperCase() ?? '?'}</span>
                                             }
                                         </div>

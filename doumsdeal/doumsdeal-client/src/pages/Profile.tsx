@@ -53,6 +53,8 @@ export default function Profile() {
             // Mettre à jour le localStorage
             localStorage.setItem('username', res.data.username);
             if (res.data.avatar_url) localStorage.setItem('avatarUrl', res.data.avatar_url);
+            else localStorage.removeItem('avatarUrl');
+            window.dispatchEvent(new Event('focus'));
 
             setUser(prev => prev ? { ...prev, ...res.data } : prev);
             setMessage('Profil mis à jour avec succès.');
@@ -67,7 +69,7 @@ export default function Profile() {
 
     if (!user) return <div className="page" style={{ textAlign: 'center', color: 'var(--text-muted)' }}>Chargement...</div>;
 
-    const currentAvatar = avatarPreview ?? (user.avatar_url ? `http://localhost:3000${user.avatar_url}` : null);
+    const currentAvatar = avatarPreview ?? (user.avatar_url ? `${SERVER_URL}${user.avatar_url}` : null);
 
     return (
         <div className="profile-page">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api/axiosConfig';
+import { SERVER_URL } from '../utils/url';
 
 interface Ad {
     id: number;
@@ -94,7 +95,7 @@ export default function AdDetail() {
     return (
         <div className="ad-detail">
             {ad.image_url ? (
-                <img src={`http://localhost:3000${ad.image_url}`} alt={ad.title} />
+                <img src={`${SERVER_URL}${ad.image_url}`} alt={ad.title} />
             ) : (
                 <div className="ad-detail-no-img">
                     <svg width="56" height="56" fill="none" stroke="currentColor" strokeWidth="1.2" viewBox="0 0 24 24">
@@ -130,7 +131,7 @@ export default function AdDetail() {
             <div className="ad-detail-seller">
                 <div className="avatar">
                     {ad.users.avatar_url
-                        ? <img src={`http://localhost:3000${ad.users.avatar_url}`} alt={ad.users.username} />
+                        ? <img src={`${SERVER_URL}${ad.users.avatar_url}`} alt={ad.users.username} />
                         : <span>{ad.users.username[0].toUpperCase()}</span>
                     }
                 </div>

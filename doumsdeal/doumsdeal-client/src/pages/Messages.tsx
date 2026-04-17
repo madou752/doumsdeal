@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { SERVER_URL } from '../utils/url';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api/axiosConfig';
 
@@ -21,7 +22,7 @@ function Avatar({ user }: { user: { username: string; avatar_url: string | null 
     return (
         <div className="avatar avatar-sm">
             {user.avatar_url
-                ? <img src={`http://localhost:3000${user.avatar_url}`} alt={user.username} />
+                ? <img src={`${SERVER_URL}${user.avatar_url}`} alt={user.username} />
                 : <span>{user.username[0].toUpperCase()}</span>
             }
         </div>

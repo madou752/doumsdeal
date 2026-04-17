@@ -1,13 +1,26 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import api from '../api/axiosConfig';
+import { SERVER_URL } from '../utils/url';
 
 export default function Header() {
     const navigate = useNavigate();
-    const isLoggedIn = !!localStorage.getItem('token');
-    const isAdmin = localStorage.getItem('role') === 'ADMIN';
-    const username = localStorage.getItem('username');
-    const avatarUrl = localStorage.getItem('avatarUrl');
+    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
+    const [isAdmin, setIsAdmin] = useState(localStorage.getItem('role') === 'ADMIN');
+    const [username, setUsername] = useState(localStorage.getItem('username'));
+    const [avatarUrl, setAvatarUrl] = useState(localStorage.getItem('avatarUrl'));
+
+    useEffect(() => {
+        const sync = () => {
+            setIsLoggedIn(!!localStorage.getItem('token'));
+            setIsAdmin(localStorage.getItem('role') === 'ADMIN');
+            setUsername(localStorage.getItem('username'));
+            setAvatarUrl(localStorage.getItem('avatarUrl'));
+        };
+        window.addEventListener('storage', sync);
+        window.addEventListener('focus', sync);
+        return () => { window.removeEventListener('storage', sync); window.removeEventListener('focus', sync); };
+    }, []);
     const [unread, setUnread] = useState(0);
 
     useEffect(() => {
@@ -56,7 +69,7 @@ export default function Header() {
                             <button className="header-profile-btn">
                                 <div className="avatar avatar-sm">
                                     {avatarUrl
-                                        ? <img src={`http://localhost:3000${avatarUrl}`} alt={username ?? ''} />
+                                        ? <img src={`${SERVER_URL}${avatarUrl}`} alt={username ?? ''} />
                                         : <span>{username?.[0]?.toUpperCase() ?? '?'}</span>
                                     }
                                 </div>
