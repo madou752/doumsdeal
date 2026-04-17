@@ -44,24 +44,24 @@ export default function Favorites() {
             ) : (
                 <div className="ads-grid">
                     {ads.map(ad => (
-                        <div key={ad.id} className="ad-card" style={{ position: 'relative' }}>
+                        <div key={ad.id} className="listing-card" style={{ position: 'relative' }}>
                             <Link to={`/ads/${ad.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                                 {ad.image_url ? (
-                                    <div className="ad-card-img">
+                                    <div className="listing-card-img">
                                         <img src={`${SERVER_URL}${ad.image_url}`} alt={ad.title}
                                             onError={e => {
                                                 const p = (e.target as HTMLImageElement).parentElement;
-                                                if (p) { p.className = 'ad-card-no-img'; p.innerHTML = '<span>Pas de photo</span>'; }
+                                                if (p) { p.className = 'listing-card-no-img'; p.innerHTML = '<span>Pas de photo</span>'; }
                                             }}
                                         />
                                     </div>
                                 ) : (
-                                    <div className="ad-card-no-img"><span>Pas de photo</span></div>
+                                    <div className="listing-card-no-img"><span>Pas de photo</span></div>
                                 )}
-                                <div className="ad-card-body">
-                                    <div className="ad-card-title">{ad.title}</div>
-                                    <div className="ad-card-price">{Number(ad.price).toFixed(2)} €</div>
-                                    <div className="ad-card-seller">
+                                <div className="listing-card-body">
+                                    <div className="listing-card-title">{ad.title}</div>
+                                    <div className="listing-card-price">{Number(ad.price).toFixed(2)} €</div>
+                                    <div className="listing-card-seller">
                                         <div className="avatar avatar-sm">
                                             {ad.users?.avatar_url
                                                 ? <img src={`${SERVER_URL}${ad.users.avatar_url}`} alt={ad.users.username} />

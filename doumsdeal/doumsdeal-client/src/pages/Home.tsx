@@ -77,41 +77,41 @@ export default function Home() {
             <div className="ads-grid">
                 {ads.length > 0 ? (
                     ads.map((ad: Ad) => (
-                        <Link key={ad.id} to={`/ads/${ad.id}`} className={`ad-card${ad.status === 'SOLD' ? ' ad-card-sold' : ''}`}>
+                        <Link key={ad.id} to={`/ads/${ad.id}`} className={`listing-card${ad.status === 'SOLD' ? ' listing-card-sold' : ''}`}>
                             {ad.image_url ? (
-                                <div className="ad-card-img">
+                                <div className="listing-card-img">
                                     <img
                                         src={`${SERVER_URL}${ad.image_url}`}
                                         alt={ad.title}
                                         onError={e => {
                                             const parent = (e.target as HTMLImageElement).parentElement;
                                             if (parent) {
-                                                parent.className = 'ad-card-no-img';
+                                                parent.className = 'listing-card-no-img';
                                                 parent.innerHTML = '<svg width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A1.5 1.5 0 0021.75 19.5V4.5A1.5 1.5 0 0020.25 3H3.75A1.5 1.5 0 002.25 4.5v15A1.5 1.5 0 003.75 21zM8.25 9.75a.75.75 0 100-1.5.75.75 0 000 1.5z"/></svg><span>Pas de photo</span>';
                                             }
                                         }}
                                     />
-                                    {ad.status === 'SOLD' && <div className="ad-card-sold-overlay">VENDU</div>}
+                                    {ad.status === 'SOLD' && <div className="listing-card-sold-overlay">VENDU</div>}
                                 </div>
                             ) : (
-                                <div className="ad-card-no-img">
-                                    {ad.status === 'SOLD' && <div className="ad-card-sold-overlay">VENDU</div>}
+                                <div className="listing-card-no-img">
+                                    {ad.status === 'SOLD' && <div className="listing-card-sold-overlay">VENDU</div>}
                                     <svg width="36" height="36" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                                         <path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A1.5 1.5 0 0021.75 19.5V4.5A1.5 1.5 0 0020.25 3H3.75A1.5 1.5 0 002.25 4.5v15A1.5 1.5 0 003.75 21zM8.25 9.75a.75.75 0 100-1.5.75.75 0 000 1.5z" />
                                     </svg>
                                     <span>Pas de photo</span>
                                 </div>
                             )}
-                            <div className="ad-card-body">
-                                <div className="ad-card-title">{ad.title}</div>
-                                <div className="ad-card-price">
+                            <div className="listing-card-body">
+                                <div className="listing-card-title">{ad.title}</div>
+                                <div className="listing-card-price">
                                     {ad.status === 'SOLD'
-                                        ? <span className="ad-card-sold-badge">Vendu</span>
+                                        ? <span className="listing-card-sold-badge">Vendu</span>
                                         : <>{Number(ad.price).toFixed(2)} €</>
                                     }
                                 </div>
-                                {ad.location && <div className="ad-card-location">📍 {ad.location}</div>}
-                                <div className="ad-card-seller">
+                                {ad.location && <div className="listing-card-location">📍 {ad.location}</div>}
+                                <div className="listing-card-seller">
                                     <div className="avatar avatar-sm">
                                         {ad.users?.avatar_url
                                             ? <img src={`${SERVER_URL}${ad.users.avatar_url}`} alt={ad.users.username} />
