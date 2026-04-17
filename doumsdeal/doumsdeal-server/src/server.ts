@@ -19,6 +19,7 @@ app.use(cors({
 app.use(express.json());
 
 app.use('/upload', express.static(path.join(__dirname, '../upload')));
+app.use('/upload', express.static(path.join(process.cwd(), 'upload')));
 
 // Servir le build React en production
 const clientDist = path.join(__dirname, '../../doumsdeal-client/dist');
