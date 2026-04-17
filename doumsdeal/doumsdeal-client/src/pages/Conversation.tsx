@@ -98,7 +98,7 @@ export default function Conversation() {
     if (!conv) return <div className="page" style={{ textAlign: 'center', color: 'var(--text-muted)' }}>Chargement...</div>;
 
     return (
-        <div className="page conv-page">
+        <div className="conv-page">
             {/* Topbar */}
             <div className="conv-topbar">
                 <Link to="/messages" className="conv-back">← Retour</Link>

@@ -13,7 +13,6 @@ const CONV_INCLUDE = {
 };
 
 export class MessagesManager {
-    // Récupère ou crée une conversation entre un acheteur et un vendeur pour une annonce
     static async findOrCreateConversation(buyerId: number, sellerId: number, adId: number) {
         const existing = await prisma.conversations.findFirst({
             where: { buyer_id: buyerId, seller_id: sellerId, ad_id: adId },
@@ -24,7 +23,6 @@ export class MessagesManager {
         });
     }
 
-    // Toutes les conversations d'un utilisateur (acheteur ou vendeur)
     static async getUserConversations(userId: number) {
         const convs = await prisma.conversations.findMany({
             where: {
@@ -32,15 +30,13 @@ export class MessagesManager {
             },
             include: CONV_INCLUDE,
         });
-        // Trier par date du dernier message (le plus récent en premier)
         return convs.sort((a, b) => {
-            const dateA = a.messages[0]?.created_at ?? a.created_at;
-            const dateB = b.messages[0]?.created_at ?? b.created_at;
+            const dateA = (a.messages[0]?.created_at ?? a.created_at ?? new Date(0)) as Date;
+            const dateB = (b.messages[0]?.created_at ?? b.created_at ?? new Date(0)) as Date;
             return new Date(dateB).getTime() - new Date(dateA).getTime();
         });
     }
 
-    // Messages d'une conversation (vérifie que l'user en fait partie)
     static async getConversationMessages(convId: number, userId: number) {
         const conv = await prisma.conversations.findFirst({
             where: {
@@ -57,7 +53,6 @@ export class MessagesManager {
             orderBy: { created_at: 'asc' },
         });
 
-        // Marquer comme lus les messages reçus
         await prisma.messages.updateMany({
             where: { conversation_id: convId, sender_id: { not: userId }, is_read: false },
             data: { is_read: true },
@@ -66,7 +61,6 @@ export class MessagesManager {
         return { conv, messages };
     }
 
-    // Envoyer un message
     static async sendMessage(convId: number, senderId: number, content: string) {
         const conv = await prisma.conversations.findFirst({
             where: {
@@ -86,7 +80,6 @@ export class MessagesManager {
             include: { sender: { select: { id: true, username: true, avatar_url: true } } },
         });
 
-        // Notifier le destinataire par email (en tâche de fond)
         const recipient = conv.buyer_id === senderId ? conv.seller : conv.buyer;
         const sender = conv.buyer_id === senderId ? conv.buyer : conv.seller;
         sendNewMessageEmail({
@@ -101,7 +94,6 @@ export class MessagesManager {
         return msg;
     }
 
-    // Nombre de messages non lus
     static async getUnreadCount(userId: number) {
         return await prisma.messages.count({
             where: {

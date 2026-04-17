@@ -878,14 +878,98 @@ textarea {
 .conv-page {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 64px);
-  padding: 0 !important;
-  max-width: 860px;
-  width: 100%;
-  margin: 0 auto;
+  flex: 1;
+  overflow: hidden;
   background: var(--surface);
-  border-left: 1px solid var(--border);
+}
+
+/* ===== WHATSAPP-STYLE MESSAGES LAYOUT ===== */
+.messages-layout {
+  display: flex;
+  height: calc(100vh - 64px);
+  overflow: hidden;
+}
+.messages-sidebar {
+  width: 360px;
+  min-width: 260px;
   border-right: 1px solid var(--border);
+  overflow-y: auto;
+  flex-shrink: 0;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+}
+.messages-sidebar-header {
+  padding: 18px 20px;
+  font-size: 20px;
+  font-weight: 700;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 1;
+}
+.messages-sidebar-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-muted);
+  padding: 40px 20px;
+  text-align: center;
+}
+.conversations-list-sidebar {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.conversations-list-sidebar .conv-item {
+  border-radius: 0;
+  border-bottom: 1px solid var(--border);
+}
+.conversations-list-sidebar .conv-item:last-child {
+  border-bottom: none;
+}
+.conv-item-active {
+  background: var(--primary-light) !important;
+  border-left: 3px solid var(--primary) !important;
+}
+.messages-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+}
+.messages-main-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  gap: 12px;
+  font-size: 15px;
+}
+
+/* Mobile : sidebar en haut, chat en dessous */
+@media (max-width: 768px) {
+  .messages-sidebar { width: 280px; min-width: 220px; }
+}
+@media (max-width: 540px) {
+  .messages-layout { flex-direction: column; }
+  .messages-sidebar {
+    width: 100%;
+    min-width: unset;
+    max-height: 40vh;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .messages-sidebar-hidden-mobile { display: none; }
+  .messages-main { flex: 1; }
 }
 .conv-topbar {
   display: flex;

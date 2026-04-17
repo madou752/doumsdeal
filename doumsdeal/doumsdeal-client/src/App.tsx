@@ -8,7 +8,7 @@ import Profile from './pages/Profile';
 import EditAd from './pages/EditAd';
 import AdminPanel from './pages/AdminPanel';
 import Favorites from './pages/Favorites';
-import Messages from './pages/Messages';
+import MessagesLayout from './pages/MessagesLayout';
 import Conversation from './pages/Conversation';
 import NotFound from './pages/NotFound';
 import Header from './components/Header';
@@ -27,8 +27,9 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/favorites" element={<Favorites />} />
-        <Route path="/messages" element={<Messages />} />
-        <Route path="/messages/:id" element={<Conversation />} />
+        <Route path="/messages" element={<MessagesLayout />}>
+          <Route path=":id" element={<Conversation />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
