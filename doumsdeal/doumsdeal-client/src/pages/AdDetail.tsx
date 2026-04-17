@@ -93,18 +93,18 @@ export default function AdDetail() {
     const canDelete = isOwner || isAdmin;
 
     return (
-        <div className="ad-detail">
+        <div className="listing-detail">
             {ad.image_url ? (
                 <img src={`${SERVER_URL}${ad.image_url}`} alt={ad.title} />
             ) : (
-                <div className="ad-detail-no-img">
+                <div className="listing-detail-no-img">
                     <svg width="56" height="56" fill="none" stroke="currentColor" strokeWidth="1.2" viewBox="0 0 24 24">
                         <path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A1.5 1.5 0 0021.75 19.5V4.5A1.5 1.5 0 0020.25 3H3.75A1.5 1.5 0 002.25 4.5v15A1.5 1.5 0 003.75 21zM8.25 9.75a.75.75 0 100-1.5.75.75 0 000 1.5z" />
                     </svg>
                     <span>Pas de photo disponible</span>
                 </div>
             )}
-            <div className="ad-detail-header">
+            <div className="listing-detail-header">
                 <h2>{ad.title}</h2>
                 <button
                     className={`btn-favorite${favorited ? ' active' : ''}`}
@@ -114,11 +114,11 @@ export default function AdDetail() {
                     {favorited ? '♥' : '♡'} {favorited ? 'Favori' : 'Favoris'}
                 </button>
             </div>
-            <div className="ad-detail-price">
+            <div className="listing-detail-price">
                 {Number(ad.price).toFixed(2)} €
                 {ad.is_negotiable && <span style={{ fontSize: '14px', fontWeight: 400, marginLeft: '8px', color: 'var(--text-muted)' }}>(négociable)</span>}
             </div>
-            <div className="ad-detail-meta">
+            <div className="listing-detail-meta">
                 <span className={`badge ${ad.status === 'AVAILABLE' ? 'badge-available' : 'badge-sold'}`}>
                     {STATUS_LABELS[ad.status] ?? ad.status}
                 </span>
@@ -128,7 +128,7 @@ export default function AdDetail() {
                 <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>👁 {ad.views_count ?? 0} vue{(ad.views_count ?? 0) > 1 ? 's' : ''}</span>
                 <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Publié le {new Date(ad.created_at).toLocaleDateString('fr-FR')}</span>
             </div>
-            <div className="ad-detail-seller">
+            <div className="listing-detail-seller">
                 <div className="avatar">
                     {ad.users.avatar_url
                         ? <img src={`${SERVER_URL}${ad.users.avatar_url}`} alt={ad.users.username} />
@@ -140,8 +140,8 @@ export default function AdDetail() {
                     <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Vendeur</div>
                 </div>
             </div>
-            <div className="ad-detail-desc">{ad.description}</div>
-            <div className="ad-detail-actions">
+            <div className="listing-detail-desc">{ad.description}</div>
+            <div className="listing-detail-actions">
                 {canEdit && <button onClick={() => navigate(`/ads/${id}/edit`)}>Modifier</button>}
                 {canDelete && <button className="btn-danger" onClick={handleDelete}>Supprimer</button>}
                 {token && !isOwner && (
