@@ -50,7 +50,6 @@ export default function Profile() {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
-            // Mettre à jour le localStorage
             localStorage.setItem('username', res.data.username);
             if (res.data.avatar_url) localStorage.setItem('avatarUrl', res.data.avatar_url);
             else localStorage.removeItem('avatarUrl');
