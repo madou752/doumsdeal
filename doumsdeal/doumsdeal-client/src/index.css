@@ -880,8 +880,12 @@ textarea {
   flex-direction: column;
   height: calc(100vh - 64px);
   padding: 0 !important;
-  max-width: 800px;
+  max-width: 860px;
+  width: 100%;
   margin: 0 auto;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
 }
 .conv-topbar {
   display: flex;

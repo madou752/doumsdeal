@@ -26,12 +26,17 @@ export class MessagesManager {
 
     // Toutes les conversations d'un utilisateur (acheteur ou vendeur)
     static async getUserConversations(userId: number) {
-        return await prisma.conversations.findMany({
+        const convs = await prisma.conversations.findMany({
             where: {
                 OR: [{ buyer_id: userId }, { seller_id: userId }],
             },
             include: CONV_INCLUDE,
-            orderBy: { created_at: 'desc' },
+        });
+        // Trier par date du dernier message (le plus récent en premier)
+        return convs.sort((a, b) => {
+            const dateA = a.messages[0]?.created_at ?? a.created_at;
+            const dateB = b.messages[0]?.created_at ?? b.created_at;
+            return new Date(dateB).getTime() - new Date(dateA).getTime();
         });
     }
 
