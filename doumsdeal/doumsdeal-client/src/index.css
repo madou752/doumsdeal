@@ -315,7 +315,7 @@ textarea {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: top;
   display: block;
   transition: transform 0.35s ease;
 }
@@ -814,31 +814,46 @@ textarea {
   flex-direction: column;
   gap: 0;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: calc(var(--radius) + 4px);
   overflow: hidden;
-  max-width: 700px;
+  max-width: 720px;
+  box-shadow: var(--shadow);
 }
 .conv-item {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 14px 16px;
+  padding: 16px 18px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   text-decoration: none;
   color: var(--text);
-  transition: background 0.15s;
+  transition: background 0.15s, box-shadow 0.15s;
 }
 .conv-item:last-child { border-bottom: none; }
-.conv-item:hover { background: var(--bg); }
+.conv-item:hover { background: var(--primary-light); }
 .conv-body { flex: 1; min-width: 0; }
-.conv-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
-.conv-username { font-weight: 600; font-size: 15px; }
-.conv-time { font-size: 12px; color: var(--text-muted); }
-.conv-ad-title { font-size: 12px; color: var(--primary); margin-bottom: 2px; }
+.conv-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
+.conv-username { font-weight: 700; font-size: 15px; }
+.conv-time { font-size: 11px; color: var(--text-muted); background: var(--bg); padding: 2px 7px; border-radius: 10px; }
+.conv-ad-title { font-size: 12px; color: var(--primary); margin-bottom: 3px; font-weight: 500; }
 .conv-preview { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.conv-preview-unread { font-weight: 600; color: var(--text); }
-.conv-badge { color: var(--primary); font-size: 18px; margin-left: auto; }
+.conv-preview-unread { font-weight: 700; color: var(--text); }
+.conv-badge {
+  background: var(--primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
 
 /* Header bouton messages */
 .header-msg-btn { position: relative; }

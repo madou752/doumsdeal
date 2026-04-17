@@ -67,7 +67,12 @@ export default function Messages() {
                                 <div className="conv-body">
                                     <div className="conv-header-row">
                                         <span className="conv-username">{other.username}</span>
-                                        {last && <span className="conv-time">{new Date(last.created_at).toLocaleDateString('fr-FR')}</span>}
+                                        {last && <span className="conv-time">
+                                            {new Date(last.created_at).toLocaleDateString('fr-FR') === new Date().toLocaleDateString('fr-FR')
+                                                ? new Date(last.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+                                                : new Date(last.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
+                                            }
+                                        </span>}
                                     </div>
                                     <div className="conv-ad-title">📦 {conv.ads.title}</div>
                                     {last && (
@@ -76,7 +81,7 @@ export default function Messages() {
                                         </div>
                                     )}
                                 </div>
-                                {hasUnread && <span className="conv-badge">●</span>}
+                                {hasUnread && <span className="conv-badge">1</span>}
                             </Link>
                         );
                     })}
