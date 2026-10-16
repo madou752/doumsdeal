@@ -11,6 +11,10 @@ export class AdminController {
     static async toggleUserActive(req: Request, res: Response) {
         try {
             const id = parseInt(Array.isArray(req.params.id) ? req.params.id[0] : req.params.id);
+            if (id === (req as any).user.id) {
+                res.status(400).json({ message: "Vous ne pouvez pas suspendre votre propre compte" });
+                return;
+            }
             const result = await AdminService.toggleUserActive(id);
             logAction({ user_id: (req as any).user.id, action: result.is_active ? 'REACTIVATE_USER' : 'BAN_USER', target_type: 'user', target_id: id, details: `Utilisateur #${id} ${result.is_active ? 'réactivé' : 'suspendu'}` });
             res.status(200).json(result);
@@ -22,6 +26,10 @@ export class AdminController {
     static async deleteUser(req: Request, res: Response) {
         try {
             const id = parseInt(Array.isArray(req.params.id) ? req.params.id[0] : req.params.id);
+            if (id === (req as any).user.id) {
+                res.status(400).json({ message: "Vous ne pouvez pas supprimer votre propre compte" });
+                return;
+            }
             await AdminService.deleteUser(id);
             logAction({ user_id: (req as any).user.id, action: 'DELETE_USER', target_type: 'user', target_id: id, details: `Utilisateur #${id} supprimé` });
             res.status(200).json({ message: "Utilisateur banni avec succès" });

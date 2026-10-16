@@ -19,8 +19,7 @@ export default function Register() {
 
             // Connexion automatique après inscription
             const loginRes = await api.post('/auth/login', { email, password });
-            const credentials = btoa(`${email}:${password}`);
-            localStorage.setItem('token', `Basic ${credentials}`);
+            localStorage.setItem('token', `Bearer ${loginRes.data.token}`);
             localStorage.setItem('role', loginRes.data.user.role);
             localStorage.setItem('username', loginRes.data.user.username);
             localStorage.setItem('userId', String(loginRes.data.user.id));

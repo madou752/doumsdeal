@@ -15,8 +15,7 @@ export default function Login() {
         try {
             const res = await api.post('/auth/login', { email, password });
 
-            const credentials = btoa(`${email}:${password}`);
-            localStorage.setItem('token', `Basic ${credentials}`);
+            localStorage.setItem('token', `Bearer ${res.data.token}`);
             localStorage.setItem('role', res.data.user.role);
             localStorage.setItem('username', res.data.user.username);
             localStorage.setItem('userId', String(res.data.user.id));

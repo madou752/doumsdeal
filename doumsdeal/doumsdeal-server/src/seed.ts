@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import { prisma } from './prisma';
 
 async function main() {
@@ -22,8 +23,12 @@ async function main() {
     console.log(`✓ ${categories.length} catégories créées`);
 
     // ===== UTILISATEURS =====
-    const adminHash = await bcrypt.hash('admin123', 10);
-    const userHash  = await bcrypt.hash('user123', 10);
+    // Mots de passe lus dans le .env (SEED_ADMIN_PASSWORD / SEED_USER_PASSWORD), sinon générés au hasard :
+    // jamais de mot de passe en dur dans le code, surtout pour le compte admin.
+    const adminPassword = process.env.SEED_ADMIN_PASSWORD || crypto.randomBytes(12).toString('base64url');
+    const userPassword  = process.env.SEED_USER_PASSWORD  || crypto.randomBytes(12).toString('base64url');
+    const adminHash = await bcrypt.hash(adminPassword, 10);
+    const userHash  = await bcrypt.hash(userPassword, 10);
 
     const admin = await prisma.users.upsert({
         where: { email: 'admin@doumsdeal.com' },
@@ -156,9 +161,13 @@ async function main() {
     }
     console.log(`✓ ${adsCount} annonces créées`);
     console.log('\n🎉 Seed terminé ! Comptes de démo :');
-    console.log('   Admin  → email: admin@doumsdeal.com  / mdp: admin123');
-    console.log('   Alice  → email: alice@doumsdeal.com  / mdp: user123');
-    console.log('   Bob    → email: bob@doumsdeal.com    / mdp: user123');
+    console.log('   Admin  → email: admin@doumsdeal.com');
+    console.log('   Alice  → email: alice@doumsdeal.com');
+    console.log('   Bob    → email: bob@doumsdeal.com');
+    if (!process.env.SEED_ADMIN_PASSWORD || !process.env.SEED_USER_PASSWORD) {
+        // Affiché une seule fois, en local : note-les ou définis-les dans le .env
+        console.log(`   Mots de passe générés → admin : ${adminPassword} / alice et bob : ${userPassword}`);
+    }
 }
 
 main()

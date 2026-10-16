@@ -50,6 +50,8 @@ export default function Profile() {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
+            // Après un changement de mot de passe, l'ancien jeton n'est plus valide : on garde le nouveau
+            if (res.data.token) localStorage.setItem('token', `Bearer ${res.data.token}`);
             localStorage.setItem('username', res.data.username);
             if (res.data.avatar_url) localStorage.setItem('avatarUrl', res.data.avatar_url);
             else localStorage.removeItem('avatarUrl');

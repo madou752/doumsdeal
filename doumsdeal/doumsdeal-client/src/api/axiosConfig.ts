@@ -5,7 +5,12 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  let token = localStorage.getItem('token');
+  // Ancien format (email:mot de passe en base64) : on l'efface, l'utilisateur se reconnecte une fois
+  if (token?.startsWith('Basic ')) {
+    localStorage.removeItem('token');
+    token = null;
+  }
   if (token) {
     config.headers.Authorization = token;
   }

@@ -1,33 +1,27 @@
 import {Request, Response, NextFunction} from 'express';
-import bcrypt from 'bcrypt';
 import { prisma } from '../prisma';
+import { verifyToken, passwordFingerprint } from './token';
 
 export const requireAuth = async (req: Request, res: Response, next: NextFunction):Promise<void> => {
     const authHeader = req.headers.authorization;
 
-    if(!authHeader || !authHeader.startsWith('Basic ')) {
-        res.status(401).json({ message: "Authentification requise (Basic Auth)" });
+    if(!authHeader || !authHeader.startsWith('Bearer ')) {
+        res.status(401).json({ message: "Authentification requise" });
         return;
     }
 
     try {
-        const base64Credentials = authHeader.split(' ')[1];
-        if (!base64Credentials) {
-            res.status(401).json({ message: "Format d'authentification invalid" });
-            return;
-        }
-        const credentials = Buffer.from(base64Credentials, 'base64').toString('utf-8');
-        const [email, password] = credentials.split(':');
-
-        if (!email || !password) {
-            res.status(401).json({ message: "Format d'authentification invalid" });
+        const payload = verifyToken(authHeader.slice('Bearer '.length).trim());
+        if (!payload) {
+            res.status(401).json({ message: "Session invalide ou expirée, reconnectez-vous" });
             return;
         }
 
-        const user = await prisma.users.findUnique({ where: { email } });
+        const user = await prisma.users.findUnique({ where: { id: payload.sub } });
 
-        if (!user) {
-            res.status(401).json({ message: "Utilisateur non trouvé" });
+        // Utilisateur supprimé, ou mot de passe changé depuis l'émission du jeton
+        if (!user || passwordFingerprint(user.password) !== payload.pwd) {
+            res.status(401).json({ message: "Session invalide ou expirée, reconnectez-vous" });
             return;
         }
 
@@ -35,12 +29,7 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
             res.status(403).json({ message: "Votre compte a été suspendu" });
             return;
         }
-        
-        const passwordMatch = await bcrypt.compare(password, user.password);
-        if (!passwordMatch) {
-            res.status(401).json({ message: "Mot de passe incorrect" });
-            return;
-        }
+
         (req as any).user = user;
         next();
     }catch (error) {

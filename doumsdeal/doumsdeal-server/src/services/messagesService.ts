@@ -17,7 +17,8 @@ export class MessagesService {
         return await MessagesManager.getConversationMessages(convId, userId);
     }
 
-    static async sendMessage(convId: number, senderId: number, content: string) {
+    static async sendMessage(convId: number, senderId: number, content: unknown) {
+        if (typeof content !== 'string') throw new Error('Message invalide');
         const trimmed = content.trim();
         if (!trimmed) throw new Error('Message vide');
         if (trimmed.length > 2000) throw new Error('Message trop long');
