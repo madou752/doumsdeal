@@ -20,7 +20,6 @@ export class AdsService {
     static async getAdById(id: number) {
         const ad = await AdsManager.findById(id);
         if (!ad) throw new Error('Annonce introuvable');
-        // Incrémenter les vues en tâche de fond (sans bloquer la réponse)
         AdsManager.incrementViews(id).catch(() => {});
         return ad;
     }
@@ -32,7 +31,6 @@ export class AdsService {
         return await AdsManager.delete(id);
     }
 
-    // ===== FAVORIS =====
     static async toggleFavorite(userId: number, adId: number) {
         const already = await AdsManager.isFavorite(userId, adId);
         if (already) {
