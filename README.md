@@ -140,6 +140,6 @@ L'application est disponible sur `http://localhost:5173`.
 
 ## Auteur
 
-**Mehdi Hammadou** (Madou)
+**Mehdi Hammadou**
 
 [Portfolio](https://portfoliohammadoumehdi.vercel.app/) · [GitHub](https://github.com/madou752)
